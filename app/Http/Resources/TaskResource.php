@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class UserResource extends Resource
+class TaskResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,8 @@ class UserResource extends Resource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'active' => (bool) $this->active,
-            'admin' => (bool) $this->admin,
-            'assignedTasksCount' => $this->tasks()->count(),
-            'completedTasksCount' => $this->tasks()->where('status', true)->count(),
+            'title' => $this->title,
+            'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

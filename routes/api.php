@@ -27,12 +27,20 @@ Route::middleware(['auth:api', 'active'])->group(function () {
 
     // only for admin or for loggedin user having same id
     Route::get('users/{user}', 'UsersController@show');
+    Route::get('tasks/{task}', 'TasksController@show');
 });
 
 // admin routes
 Route::middleware(['auth:api', 'active', 'admin'])->group(function () {
-    Route::post('users', 'UsersController@store');
     Route::get('users', 'UsersController@index');
+    Route::post('users', 'UsersController@store');
     Route::patch('users/{user}', 'UsersController@update');
     Route::delete('users/{user}', 'UsersController@destroy');
+
+    Route::get('tasks', 'TasksController@index');
+    Route::post('tasks', 'TasksController@store');
+
+    Route::get('tasks/{task}', 'TasksController@show');
+    Route::patch('tasks/{task}', 'TasksController@update');
+    Route::delete('tasks/{task}', 'TasksController@destroy');
 });
