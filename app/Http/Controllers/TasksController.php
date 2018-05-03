@@ -44,7 +44,11 @@ class TasksController extends Controller
      */
     public function show(Task $task)
     {
-        return new TaskResource($task);
+        if ($this->canAccessTask($task)) {
+            return new TaskResource($task);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     /**
@@ -84,5 +88,16 @@ class TasksController extends Controller
         } else {
             return response()->json(['error' => 'Unprocessable'], 422);
         }
+    }
+
+    public function canAccessTask($task)
+    {
+        $user = auth()->user();
+
+        if ($user->isAdmin() || $user->tasks()->where('task_id', $task->id)->exists()) {
+            return true;
+        }
+
+        return false;
     }
 }
