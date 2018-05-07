@@ -29,6 +29,13 @@ Route::middleware(['auth:api', 'active'])->group(function () {
     Route::get('users/{user}', 'UsersController@show');
     Route::get('tasks/{task}', 'TasksController@show');
     Route::get('users/{user}/tasks', 'TaskUserController@userTasks');
+    Route::post('users/{user}/tasks/{task}', 'TaskUserController@completeTask');
+
+    // feedback
+    Route::get('tasks/{task}/feedbacks', 'FeedbacksController@taskFeedbacks');
+    Route::post('tasks/{task}/feedbacks', 'FeedbacksController@createFeedback');
+    Route::get('users/{user}/feedbacks', 'FeedbacksController@userFeedbacks');
+    Route::delete('feedbacks/{feedback}', 'FeedbacksController@deleteFeedback');
 });
 
 // admin routes
@@ -45,7 +52,6 @@ Route::middleware(['auth:api', 'active', 'admin'])->group(function () {
     Route::delete('tasks/{task}', 'TasksController@destroy');
 
     Route::get('tasks/{task}/users', 'TaskUserController@users');
-
     Route::get('tasks/{task}/unassignedusers', 'TaskUserController@unassignedUsers');
 
     Route::post('tasks/{task}/assigntask', 'TaskUserController@assignTask');

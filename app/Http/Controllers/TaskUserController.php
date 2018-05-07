@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\User;
 use App\Http\Resources\TaskResource;
+use Illuminate\Support\Facades\Gate;
 
 class TaskUserController extends Controller
 {
@@ -19,6 +20,10 @@ class TaskUserController extends Controller
 
     public function userTasks(User $user)
     {
+        if (Gate::denies('userAccess', $user)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $tasks = $user->tasks;
 
         return TaskResource::collection($tasks);
@@ -28,7 +33,7 @@ class TaskUserController extends Controller
     {
         $ids = $task->users()->pluck('user_id');
 
-        $unAssignedUsers = User::whereNotIn('id', $ids)->get();
+        $unAssignedUsers = User::whereNotIn('id', $ids)->where('admin', false)->get();
 
         return UserResource::collection($unAssignedUsers);
     }
@@ -52,6 +57,17 @@ class TaskUserController extends Controller
             return new UserResource($user);
         } else {
             return response()->json(['Error' => 'Not Found'], 404);
+        }
+    }
+
+    public function completeTask(Request $request, User $user, Task $task)
+    {
+        if ($user->tasks()->where('task_id', $task->id)->exists()) {
+            $result = $user->tasks()->updateExistingPivot($task->id, ['status' => 1]);
+
+            return response()->json($result, 200);
+        } else {
+            return response()->json(['Error' => 'Not Assigned'], 403);
         }
     }
 }

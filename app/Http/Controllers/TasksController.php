@@ -45,6 +45,14 @@ class TasksController extends Controller
     public function show(Task $task)
     {
         if ($this->canAccessTask($task)) {
+            $user = auth()->user();
+
+            if (!$user->isAdmin()) {
+                $pivot = $user->tasks()->where('task_id', $task->id)->first()->pivot;
+
+                $task->pivot = $pivot;
+            }
+
             return new TaskResource($task);
         }
 

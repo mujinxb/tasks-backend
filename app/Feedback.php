@@ -12,7 +12,7 @@ class Feedback extends Model
      * @var array
      */
     protected $fillable = [
-        'description'
+        'description', 'user_id'
     ];
 
     public function user()
