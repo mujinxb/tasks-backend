@@ -28,8 +28,7 @@ Route::middleware(['guest'])->post('login', 'AuthController@login');
 
 Route::middleware(['auth:api', 'active'])->group(function () {
     Route::post('logout', 'AuthController@logout');
-    Route::get('me', 'AuthController@me');
-    Route::post('refresh', 'AuthController@refresh');
+
     // only for admin or for loggedin user having same id
     Route::get('users/{user}', 'UsersController@show');
     Route::get('tasks/{task}', 'TasksController@show');
@@ -58,3 +57,145 @@ Route::middleware(['auth:api', 'active', 'admin'])->group(function () {
     Route::delete('tasks/{task}/users/{user}', 'TaskUserController@unassignTask');
 });
 ```
+
+## API Endpoints Docs
+
+**Login**
+----
+Login a user
+
+* **URL**
+    `/api/login`
+
+* **Method:**
+  `POST`
+
+* **Permisssions**
+    guest: unauthenticated user 
+  
+* **Data Params**
+    `{
+        email: [string], 
+        password: [string]
+    }`
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:** `{
+        id: [number],
+        name: [string],
+        token: [string],
+        isAuthenticated: [boolean],
+        isAdmin: [boolean]
+    }`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED
+  * **Content:** `{ error : "Unauthorized" }`
+  * **Reason:** email/password mismatch, not found
+
+--------
+
+**Logout**
+----
+Logout an authenticated user
+
+* **URL**
+    `/api/logout`
+
+* **Method:**
+  `POST`
+
+* **Permisssions**
+    authenticated, active user/admin 
+  
+* **Data Params**
+    None
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:**  `{ message : 'Successfully logged out' }`
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED
+  * **Content:** `{ error : "Unauthorized" }`
+  * **Reason:** unactuenticated, inactive user/admin
+
+--------
+
+**Get User**
+----
+Get User info
+
+* **URL**
+    `/api/user/:id`
+
+* **Method:**
+  `GET`
+
+* **Permisssions**
+   authenticated, active user/admin
+  
+* **Data Params**
+    None
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:** `{
+        id: [number],
+        name: [string],
+        email: [string],
+        active: [boolean],
+        admin: [boolean],
+        assignedTasksCount: [number],
+        completedTasksCount: [number],
+        created_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        },
+        updated_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        }
+    }`
+
+    **Sample Response** 
+    ```
+    {
+        "id": 1,
+        "name": "Muajhid",
+        "email": "mujahid@tm.com",
+        "active": true,
+        "admin": true,
+        "assignedTasksCount": 0,
+        "completedTasksCount": 0,
+        "created_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "updated_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        }
+    }
+    ```
+ 
+* **Error Response:**
+    * **Code:** 404
+    * **Content:** 
+    * **Reason:** User Not found
+  or
+    * **Code:** 401 UNAUTHORIZED
+    * **Content:** `{ error : "Unauthorized" }`
+  * **Reason:** unautherized, or user is not admin and accessing someone else's info
+
+--------
