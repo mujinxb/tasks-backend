@@ -64,16 +64,16 @@ Route::middleware(['auth:api', 'active', 'admin'])->group(function () {
 ----
 Login a user
 
-* **URL**
+* **URL:**
     `/api/login`
 
 * **Method:**
   `POST`
 
-* **Permisssions**
+* **Permisssions:**
     guest: unauthenticated user 
   
-* **Data Params**
+* **Data Params:**
     `{
         email: [string], 
         password: [string]
@@ -81,7 +81,7 @@ Login a user
 
 * **Success Response:**
   
-    **Code:** `200`
+    **Code:** `200`  
     **Content:** `{
         id: [number],
         name: [string],
@@ -92,7 +92,7 @@ Login a user
  
 * **Error Response:**
 
-  * **Code:** 401 UNAUTHORIZED
+  * **Code:** 401 UNAUTHORIZED  
   * **Content:** `{ error : "Unauthorized" }`
   * **Reason:** email/password mismatch, not found
 
@@ -102,21 +102,21 @@ Login a user
 ----
 Logout an authenticated user
 
-* **URL**
+* **URL:**
     `/api/logout`
 
 * **Method:**
   `POST`
 
-* **Permisssions**
+* **Permisssions:**
     authenticated, active user/admin 
   
-* **Data Params**
+* **Data Params:**
     None
 
 * **Success Response:**
   
-    **Code:** `200`
+    **Code:** `200`  
     **Content:**  `{ message : 'Successfully logged out' }`
  
 * **Error Response:**
@@ -127,20 +127,115 @@ Logout an authenticated user
 
 --------
 
+**Get All Users**
+----
+Get list of all users
+* **URL:**
+    `/api/users`
+
+* **Method:**
+  `GET`
+
+* **Permisssions:**
+   authenticated, active admin
+  
+* **Data Params:**
+    None
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:**  
+    `[
+    {
+        id: [number],
+        name: [string],
+        email: [string],
+        active: [boolean],
+        admin: [boolean],
+        assignedTasksCount: [number],
+        completedTasksCount: [number],
+        created_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        },
+        updated_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        }
+    },
+    ....
+   ]`
+
+    **Sample Response:** 
+    ``` 
+    [
+	    {
+	        "id": 2,
+	        "name": "John Doe",
+	        "email": "jhonny@tm.com",
+	        "active": true,
+	        "admin": false,
+	        "assignedTasksCount": 2,
+	        "completedTasksCount": 1,
+	        "created_at": {
+	            "date": "2018-05-02 07:05:27.000000",
+	            "timezone_type": 3,
+	            "timezone": "UTC"
+	        },
+	        "updated_at": {
+	            "date": "2018-05-08 08:20:24.000000",
+	            "timezone_type": 3,
+	            "timezone": "UTC"
+	        }
+	    },
+	    {
+	        "id": 3,
+	        "name": "ali",
+	        "email": "ali@tm.com",
+	        "active": true,
+	        "admin": false,
+	        "assignedTasksCount": 1,
+	        "completedTasksCount": 0,
+	        "created_at": {
+	            "date": "2018-05-02 07:06:05.000000",
+	            "timezone_type": 3,
+	            "timezone": "UTC"
+	        },
+	        "updated_at": {
+	            "date": "2018-05-04 09:39:30.000000",
+	            "timezone_type": 3,
+	            "timezone": "UTC"
+	        }
+	    },
+	    ...
+	]
+    ```
+ 
+* **Error Response:**
+ 
+    * **Code:** 401 UNAUTHORIZED
+    * **Content:** `{ error : "Unauthorized" }`
+    * **Reason:** unautherized, or user is not admin and accessing someone else's info
+
+--------
+
 **Get User**
 ----
 Get User info
 
-* **URL**
+* **URL:**
     `/api/user/:id`
 
 * **Method:**
   `GET`
 
-* **Permisssions**
+* **Permisssions:**
    authenticated, active user/admin
   
-* **Data Params**
+* **Data Params:**
     None
 
 * **Success Response:**
@@ -166,7 +261,7 @@ Get User info
         }
     }`
 
-    **Sample Response** 
+    **Sample Response:** 
     ```
     {
         "id": 1,
@@ -192,10 +287,10 @@ Get User info
 * **Error Response:**
     * **Code:** 404
     * **Content:** 
-    * **Reason:** User Not found
-  or
+    * **Reason:** User Not Found  
+    OR  
     * **Code:** 401 UNAUTHORIZED
     * **Content:** `{ error : "Unauthorized" }`
-  * **Reason:** unautherized, or user is not admin and accessing someone else's info
+    * **Reason:** unautherized, or user is not admin and accessing someone else's info
 
 --------
