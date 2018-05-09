@@ -67,6 +67,251 @@ Logout an authenticated user
 
 --------
 
+
+**Create a User**
+
+----
+Create a user
+
+*  **URL:**
+    `/api/users/`
+
+*  **Method:**
+    `POST`
+
+*  **Permisssions:**
+    authenticated, active admin
+
+*  **Data Params:**  `{
+        name: [string],
+        email: [string],
+        password: [string],
+        active: [boolean],
+        admic: [boolean]
+    }`
+
+*  **Success Response:**
+
+    **Code:**  `200`   
+    **Content:** `{
+        id: [number],
+        name: [string],
+        email: [string],
+        active: [boolean],
+        admin: [boolean],
+        assignedTasksCount: [number],
+        completedTasksCount: [number],
+        created_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        },
+        updated_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        }
+    }`
+
+    **Sample Response:**
+    
+    ```
+    {
+    	"id": 1,
+    	"name": "Muajhid",
+    	"email": "mujahid@tm.com",
+    	"active": true,
+    	"admin": true,
+    	"assignedTasksCount": 0,
+    	"completedTasksCount": 0,
+    	"created_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+    	},
+    	"updated_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+    	}
+    }
+    ```
+
+*  **Error Response:**
+
+	*  **Code:** 422
+	*  **Content:** `{
+            message: [string],
+            errors: {
+                errorFieldName: [array of errors],
+                ...
+            }
+	    }`
+	*  **Reason:**  Validation errors 
+	*  **Sample**
+    	```
+    	{
+        "message": "The given data was invalid.",
+        "errors": {
+                "name": [
+                    "The name field is required."
+                ],
+                "email": [
+                    "The email field is required."
+                ],
+                "password": [
+                    "The password field is required."
+                ],
+                "active": [
+                    "The active field is required."
+                ],
+                "admin": [
+                    "The admin field is required."
+                ]
+            }
+        }
+    	```
+	OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unautherized" }`
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin
+
+--------
+
+
+**Update a User**
+
+----
+
+Update a specified user
+
+*  **URL:**
+    `/api/users/:id`
+
+*  **Method:**
+    `PATCH`
+
+*  **Permisssions:**
+    authenticated, active admin
+
+*  **Data Params:**  `{
+        name: [string],
+        email: [string],
+        password(optional): [string],
+        active: [boolean],
+        admic: [boolean]
+    }`
+
+*  **Success Response:**
+
+    **Code:**  `200`   
+    **Content:** `{
+        id: [number],
+        name: [string],
+        email: [string],
+        active: [boolean],
+        admin: [boolean],
+        assignedTasksCount: [number],
+        completedTasksCount: [number],
+        created_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        },
+        updated_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        }
+    }`
+
+    **Sample Response:**
+    
+    ```
+    {
+    	"id": 1,
+    	"name": "Muajhid",
+    	"email": "mujahid@tm.com",
+    	"active": true,
+    	"admin": true,
+    	"assignedTasksCount": 0,
+    	"completedTasksCount": 0,
+    	"created_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+    	},
+    	"updated_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+    	}
+    }
+    ```
+
+*  **Error Response:**
+
+	*  **Code:** 422
+	*  **Content:** `{
+            message: [string],
+            errors: {
+                errorFieldName: [array of errors],
+                ...
+            }
+	    }`
+	*  **Reason:**  Validation errors 
+	OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "unautherized" }`
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin
+	OR  
+	*  **Code:** 404
+	*  **Content:**  `{ error : "Not Found" }`
+	*  **Reason:** specified user not found
+
+--------
+
+
+
+**Delete a User**
+
+----
+
+Delete a specified user
+
+*  **URL:**
+    `/api/users/:id`
+
+*  **Method:**
+    `DELETE`
+
+*  **Permisssions:**
+    authenticated, active admin
+
+*  **Data Params:**  None
+
+*  **Success Response:**
+
+    **Code:**  `200`   
+    **Content:** `{message: 'success'}`
+
+*  **Error Response:**
+
+	*  **Code:** 422
+	*  **Content:** `{
+            error : 'Unprocessable'
+	    }`
+	OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "unautherized" }`
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin
+	OR  
+	*  **Code:** 404
+	*  **Content:**  `{ error : "Not Found" }`
+	*  **Reason:** specified user not found
+
+--------
+
 **Get All Users**
 ----
 Get list of all users
@@ -85,8 +330,7 @@ Get list of all users
 * **Success Response:**
   
     **Code:** `200`   
-    **Content:**  
-    `[
+    **Content:**  `[
         {
             id: [number],
             name: [string],
@@ -109,6 +353,7 @@ Get list of all users
    ]`
 
     **Sample Response:** 
+
     ``` 
     [
 	    {
@@ -154,9 +399,9 @@ Get list of all users
  
 * **Error Response:**
  
-    * **Code:** 401 UNAUTHORIZED
+    * **Code:** 401
     * **Content:** `{ error : "Unauthorized" }`
-    * **Reason:** unautherized, or user is not admin and accessing someone else's info
+    * **Reason:** unautherized, or currenlty authenticated user is not admin
 
 --------
 
@@ -193,8 +438,7 @@ None
 
     **Code:**  `200`  
 
-    **Content:** 
-    `{
+    **Content:** `{
         id: [number],
         name: [string],
         email: [string],
@@ -212,15 +456,12 @@ None
             timezone_type: [number],
             timezone: [string]
         }
-
     }`
-
   
 
 **Sample Response:**
 
 ```
-
 {
 	"id": 1,
 	"name": "Muajhid",
@@ -252,9 +493,211 @@ None
 	OR  
 	*  **Code:** 401 UNAUTHORIZED
 	*  **Content:**  `{ error : "Unauthorized" }`
-	*  **Reason:** unautherized, or user is not admin and accessing someone else's info
+	*  **Reason:** unautherized, or currenlty authenticated user is not admin and accessing someone else's info
 
 --------
+
+
+
+**Create a Task**
+
+----
+
+Create a task
+
+*  **URL:**
+    `/api/tasks`
+
+*  **Method:**
+    `POST`
+
+*  **Permisssions:**
+    authenticated, active admin
+
+*  **Data Params:**  `{
+        title: [string],
+        description: [string]
+    }`
+
+*  **Success Response:**
+
+    **Code:**  `200`   
+    **Content:** `{
+        "id": [number],
+        "title": [string],
+        description: [string],
+        created_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        },
+        updated_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        }
+    }`
+
+    **Sample Response:**
+    
+    ```
+    {
+        "id": 1,
+        "title": "First Task modiifed",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "created_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "updated_at": {
+            "date": "2018-05-08 06:55:14.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        }
+    }
+    ```
+
+*  **Error Response:**
+
+	*  **Code:** 422
+	*  **Content:** `{
+            message: [string],
+            errors: {
+                errorFieldName: [array of errors],
+                ...
+            }
+	    }`
+	*  **Reason:**  Validation errors 
+	OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "unautherized" }`
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin
+
+--------
+
+
+**Update a Task**
+
+----
+
+Update a specified task
+
+*  **URL:**
+    `/api/tasks/:id`
+
+*  **Method:**
+    `PATCH`
+
+*  **Permisssions:**
+    authenticated, active admin
+
+*  **Data Params:**  `{
+        title: [string],
+        description: [string]
+    }`
+
+*  **Success Response:**
+
+    **Code:**  `200`   
+    **Content:** `{
+        id: [number],
+        title: [string],
+        description: [string],
+        created_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        },
+        updated_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        }
+    }`
+
+    **Sample Response:**
+    
+    ```
+    {
+        "id": 1,
+        "title": "First Task modiifed",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "created_at": {
+            "date": "2018-04-01 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "updated_at": {
+            "date": "2018-05-08 06:55:14.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        }
+    }
+    ```
+
+*  **Error Response:**
+
+	*  **Code:** 422
+	*  **Content:** `{
+            message: [string],
+            errors: {
+                errorFieldName: [array of errors],
+                ...
+            }
+	    }`
+	*  **Reason:**  Validation errors 
+	OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unauthorized" }`
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin
+	OR  
+	*  **Code:** 404
+	*  **Content:**  `{ error : "Not Found" }`
+	*  **Reason:** specified task not found
+
+--------
+
+
+**Delete a task**
+
+----
+
+Delete a specified task
+
+*  **URL:**
+    `/api/tasks/:id`
+
+*  **Method:**
+    `DELETE`
+
+*  **Permisssions:**
+    authenticated, active admin
+
+*  **Data Params:**  None
+
+*  **Success Response:**
+
+    **Code:**  `200`   
+    **Content:** `{message: 'success'}`
+
+*  **Error Response:**
+
+	*  **Code:** 422
+	*  **Content:** `{
+            error : 'Unprocessable'
+	    }`
+	OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unauthorized" }`
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin
+	OR  
+	*  **Code:** 404
+	*  **Content:**  `{ error : "Not Found" }`
+	*  **Reason:** specified task not found
+
+--------
+
 
 **Get All Tasks**
 
@@ -292,8 +735,8 @@ None
 
     **Content:** `[
         {
-            "id": [number],
-            "title": [string],
+            id: [number],
+            title: [string],
             description: [string],
             created_at: {
                 date: [string],
@@ -355,7 +798,7 @@ None
 	OR  
 	*  **Code:** 401 UNAUTHORIZED
 	*  **Content:**  `{ error : "Unauthorized" }`
-	*  **Reason:** unauthorized, or user is not admin and accessing unassigned task
+	*  **Reason:** unauthorized or currenlty authenticated user is not admin
 
 --------
 
@@ -374,7 +817,7 @@ Get Single task information
     `GET`
 
 *  **Permisssions:**
-    authenticated, active admin or user who is assigned this task
+    authenticated, active admin/user
 
 *  **Data Params:**
     None
@@ -383,8 +826,8 @@ Get Single task information
 
     **Code:**  `200`   
     **Content:** `{
-        "id": [number],
-        "title": [string],
+        id: [number],
+        title: [string],
         description: [string],
         created_at: {
             date: [string],
@@ -401,7 +844,6 @@ Get Single task information
     **Sample Response:**
 
     ```
-
     {
         "id": 1,
         "title": "First Task modiifed",
@@ -417,7 +859,6 @@ Get Single task information
             "timezone": "UTC"
         }
     }
-
     ```
 
     **Note:** If this resource is accessed by a non-admin user, response will inlcude completed: boolean,   assigned_at: date, completed_at: date fields as well
@@ -430,7 +871,7 @@ Get Single task information
 	OR  
 	*  **Code:** 401 UNAUTHORIZED
 	*  **Content:**  `{ error : "Unauthorized" }`
-	*  **Reason:** unauthorized, or user is not admin and accessing unassigned task
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin and accessing unassigned task
 
 --------
 
@@ -448,7 +889,7 @@ Get list of tasks assigned to a specified user
     `GET`
 
 *  **Permisssions:**
-    authenticated, active admin or user
+    authenticated, active admin/user
 
 *  **Data Params:**
     None
@@ -558,12 +999,336 @@ Get list of tasks assigned to a specified user
 
 --------
 
+**Get Task Users**
+----
+Get list of users who are assigned the specified task
+
+* **URL:**
+    `/api/tasks/:id/users`
+
+* **Method:**
+  `GET`
+
+* **Permisssions:**
+   authenticated, active admin
+  
+* **Data Params:**
+    None
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:** `[
+        {
+            id: [number],
+            name: [string],
+            email: [string],
+            active: [boolean],
+            admin: [boolean],
+            assignedTasksCount: [number],
+            completedTasksCount: [number],
+            created_at: {
+                date: [string],
+                timezone_type: [number],
+                timezone: [string]
+            },
+            updated_at: {
+                date: [string],
+                timezone_type: [number],
+                timezone: [string]
+            }
+        },
+        ...
+    ]`
+
+    **Sample Response:** 
+    ```
+    [
+        {
+            "id": 2,
+            "name": "John Doe",
+            "email": "jhonny@tm.com",
+            "active": true,
+            "admin": false,
+            "assignedTasksCount": 2,
+            "completedTasksCount": 1,
+            "created_at": {
+                "date": "2018-05-02 07:05:27.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "updated_at": {
+                "date": "2018-05-08 08:20:24.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            }
+        },
+        {
+            "id": 3,
+            "name": "ali",
+            "email": "ali@tm.com",
+            "active": true,
+            "admin": false,
+            "assignedTasksCount": 1,
+            "completedTasksCount": 0,
+            "created_at": {
+                "date": "2018-05-02 07:06:05.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "updated_at": {
+                "date": "2018-05-04 09:39:30.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            }
+        }
+    ]
+    ```
+ 
+* **Error Response:**
+    * **Code:** 404
+    * **Content:** 
+    * **Reason:** task Not Found  
+    OR  
+    * **Code:** 401 UNAUTHORIZED
+    * **Content:** `{ error : "Unauthorized" }`
+    * **Reason:** unautherized or currenlty authenticated user is not admin
+
+--------
+
+**Get Task unassigned Users**
+----
+Get list of users who are not assigned the specified task, for task assignment
+
+* **URL:**
+    `/api/tasks/:id/unassignedusers`
+
+* **Method:**
+  `GET`
+
+* **Permisssions:**
+   authenticated, active admin
+  
+* **Data Params:**
+    None
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:** `[
+        {
+            id: [number],
+            name: [string],
+            email: [string],
+            active: [boolean],
+            admin: [boolean],
+            assignedTasksCount: [number],
+            completedTasksCount: [number],
+            created_at: {
+                date: [string],
+                timezone_type: [number],
+                timezone: [string]
+            },
+            updated_at: {
+                date: [string],
+                timezone_type: [number],
+                timezone: [string]
+            }
+        },
+        ...
+    ]`
+ 
+* **Error Response:**
+    * **Code:** 404
+    * **Content:** 
+    * **Reason:** task Not Found  
+    OR  
+    * **Code:** 401 UNAUTHORIZED
+    * **Content:** `{ error : "Unauthorized" }`
+    * **Reason:** unautherized or currenlty authenticated user is not admin
+
+--------
+
+**Assign Task**
+----
+Assign specified task to the users
+
+* **URL:**
+    `/api/tasks/:id/assigntask`
+
+* **Method:**
+  `POST`
+
+* **Permisssions:**
+   authenticated, active admin
+  
+* **Data Params:** `{
+        userIds: number[]
+    }`
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:** `[
+        {
+            id: [number],
+            name: [string],
+            email: [string],
+            active: [boolean],
+            admin: [boolean],
+            assignedTasksCount: [number],
+            completedTasksCount: [number],
+            created_at: {
+                date: [string],
+                timezone_type: [number],
+                timezone: [string]
+            },
+            updated_at: {
+                date: [string],
+                timezone_type: [number],
+                timezone: [string]
+            }
+        },
+        ...
+    ]`
+
+    **Sample Response:** 
+    ```
+    [
+        {
+            "id": 3,
+            "name": "ali",
+            "email": "ali@tm.com",
+            "active": true,
+            "admin": false,
+            "assignedTasksCount": 0,
+            "completedTasksCount": 0,
+            "created_at": {
+                "date": "2018-05-02 07:06:05.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "updated_at": {
+                "date": "2018-05-04 09:39:30.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            }
+        }
+    ]
+    ```
+ 
+* **Error Response:**
+    * **Code** 422
+    *  **Content** `{
+        "message": [string],
+        "errors": {
+            "userIds": [
+                [string], ...
+            ]
+        }
+    }`
+    * **Sample erroe**
+        ```
+        {
+            "message": "The given data was invalid.",
+            "errors": {
+                "userIds": [
+                    "The user ids field is required."
+                ]
+            }
+        }
+        ```
+    OR
+    * **Code:** 404
+    * **Content:** { error:'Not Found'}
+    * **Reason:** Task Not Found  
+    OR  
+    * **Code:** 401 UNAUTHORIZED
+    * **Content:** `{ error : "Unauthorized" }`
+    * **Reason:** unautherized, or currenlty authenticated user is not admin
+
+--------
+
+
+**Unassign Task**
+----
+Remove a user from specified task
+
+* **URL:**
+    `/api/tasks/:id/users/:id`
+
+* **Method:**
+  `DELETE`
+
+* **Permisssions:**
+   authenticated, active admin
+  
+* **Data Params:**
+    None
+
+* **Success Response:**
+  
+    **Code:** `200`
+    **Content:** `{
+        id: [number],
+        name: [string],
+        email: [string],
+        active: [boolean],
+        admin: [boolean],
+        assignedTasksCount: [number],
+        completedTasksCount: [number],
+        created_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        },
+        updated_at: {
+            date: [string],
+            timezone_type: [number],
+            timezone: [string]
+        }
+    }`
+
+    **Sample Response:** 
+    ```
+    {
+        "id": 3,
+        "name": "ali",
+        "email": "ali@tm.com",
+        "active": true,
+        "admin": false,
+        "assignedTasksCount": 0,
+        "completedTasksCount": 0,
+        "created_at": {
+            "date": "2018-05-02 07:06:05.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "updated_at": {
+            "date": "2018-05-04 09:39:30.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        }
+    }
+    ```
+ 
+* **Error Response:**
+    * **Code:** 404
+    * **Content:** { error:'Not Found'}
+    * **Reason:** Task or User Not Found  
+    OR  
+    * **Code:** 401 UNAUTHORIZED
+    * **Content:** `{ error : "Unauthorized" }`
+    * **Reason:** unautherized, or currenlty authenticated user is not admin
+
+--------
+
 
 **Mark Task Completed**
 
 ----
 
-Mark an specified task as completed for the speificed user
+Mark a specified task as completed for the speificed user
 
 *  **URL:**
     `/api/users/:id/tasks/:id`
@@ -647,7 +1412,11 @@ Mark an specified task as completed for the speificed user
 	OR  
 	*  **Code:** 403
 	*  **Content:**  `{ error : "Task Not Assigned" }`
-	*  **Reason:** unauthorized, or currenlty authenticated user is and not assigned the specified task
+	*  **Reason:** unauthorized, or  currenlty authenticated user is not assigned the specified task  
+    OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unautherized" }`
+	*  **Reason:** unauthenticated
 
 --------
 
@@ -656,7 +1425,7 @@ Mark an specified task as completed for the speificed user
 
 ----
 
-Get the list of all feedbacks agaist a task, if admin user, then return feedbacks by all user otherwise feedbacks by the currently authenticated user
+Get the list of all feedbacks agaist a task, if admin then return feedbacks by all user otherwise feedbacks by the currently authenticated user
 
 *  **URL:**
     `/api/tasks/:id/feedbacks`
@@ -747,7 +1516,11 @@ Get the list of all feedbacks agaist a task, if admin user, then return feedback
 	OR  
 	*  **Code:** 403
 	*  **Content:**  `{ error : "Task Not Assigned" }`
-	*  **Reason:** unauthorized, or currenlty authenticated user is not admin and not assigned the specified task
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin and not assigned the specified task  
+    OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unautherized" }`
+	*  **Reason:** unauthenticated
 
 --------
 
@@ -825,7 +1598,11 @@ Create feedback against a task by currently authenticated user
 	OR  
 	*  **Code:** 403
 	*  **Content:**  `{ error : "Task Not Assigned" }`
-	*  **Reason:** unauthorized, or currenlty authenticated user is not assigned the specified task
+	*  **Reason:** unauthorized, or currenlty authenticated user is not assigned the specified task  
+    OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unautherized" }`
+	*  **Reason:** unauthenticated
 
 --------
 
@@ -921,7 +1698,11 @@ Get the list of all feedbacks agaist a specified task by the specified user
 
 	*  **Code:** 404
 	*  **Content:**
-	*  **Reason:** user Not Found
+	*  **Reason:** user Not Found  
+    OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unautherized" }`
+	*  **Reason:** unauthenticated
 
 --------
 
@@ -998,7 +1779,11 @@ Delete a specified feedback
 	OR  
 	*  **Code:** 403
 	*  **Content:**  `{ error : "Feedback not given by the user" }`
-	*  **Reason:** unauthorized, or currenlty authenticated user is not admin and Feedback not given by the his/her
+	*  **Reason:** unauthorized, or currenlty authenticated user is not admin and Feedback not given by the his/her  
+    OR  
+	*  **Code:** 401
+	*  **Content:**  `{ error : "Unautherized" }`
+	*  **Reason:** unauthenticated
 
 --------
 
