@@ -67,7 +67,7 @@ class TaskUserController extends Controller
 
             return response()->json($result, 200);
         } else {
-            return response()->json(['Error' => 'Not Assigned'], 403);
+            return response()->json(['error' => 'Task Not Assigned'], 403);
         }
     }
 }

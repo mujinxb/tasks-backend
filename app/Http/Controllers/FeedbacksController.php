@@ -19,7 +19,7 @@ class FeedbacksController extends Controller
         } elseif ($task->users()->where('user_id', $user->id)->exists()) {
             $feedbacks = $user->feedbacks()->where('task_id', $task->id)->OrderBy('created_at', 'desc')->get();
         } else {
-            return response()->json(['error' => 'Task no assigned!'], 403);
+            return response()->json(['error' => 'Task not assigned!'], 403);
         }
 
         return FeedbackResource::collection($feedbacks);
@@ -59,7 +59,7 @@ class FeedbacksController extends Controller
             return response()->json($feedback, 200);
         }
 
-        return response()->json(['error' => 'Feedback not provided!'], 403);
+        return response()->json(['error' => 'Feedback not given by the user'], 403);
     }
 
     public function canAccessFeedback($feedback)
